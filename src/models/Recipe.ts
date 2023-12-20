@@ -7,7 +7,6 @@ export class Recipe{
         private description: string,  
         private ingredients: string[],
         private cooking: string[],
-        
         private imageUrl: string,
         private category: RECIPES_CATEGORY
      ){}
