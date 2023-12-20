@@ -4,9 +4,10 @@ export class Recipe{
     constructor(
         private id: string,
         private title: string,
+        private description: string,  
         private ingredients: string[],
         private cooking: string[],
-        private description: string,
+        
         private imageUrl: string,
         private category: RECIPES_CATEGORY
      ){}
@@ -24,27 +25,45 @@ export class Recipe{
         return this.description
        }
 
+
+       public getIngredients():string[]{
+          return this.ingredients
+         }
+
+     public getCooking():string[]{
+          return this.cooking
+     }
+  
+     public getImageUrl():string{
+          return this.imageUrl
+     }
+  
+     public getCategory():RECIPES_CATEGORY{
+          return this.category
+     }
+     public setTitle(value:string):void{
+          this.title = value
+     }
+
        public setDescription (value:string):void{
             this.description = value
        }
-       public getImageUrl():string{
-        return this.imageUrl
-       }
+
+
+       public setIngredients (value:string[]):void{
+          this.ingredients = value
+     }
+
+     public setCooking (value:string[]):void{
+          this.cooking = value
+     }
+
 
        public setImageUrl (value:string):void{
             this.imageUrl = value
        }
-       public getPrice():number{
-        return this.price
-       }
 
-       public setPrice (value:number):void{
-            this.price = value
-       }
-       public getCategory():PRODUCTS_CATEGORY{
-          return this.category
-         }
-  
+
          public setCategory (value:RECIPES_CATEGORY):void{
               this.category = value
          }
