@@ -24,13 +24,14 @@ export enum USER_ROLES {
 
 export interface IUserDB {
     id:string,
+    idProfile: string;
     fullName:string,
     nickname: string,
     email: string,
-    createdAt: string,
     password: string,
     avatar: string,
-    role: USER_ROLES
+    role: USER_ROLES,
+    createdAt: string
   };
 
 export enum RECIPES_CATEGORY{
@@ -44,7 +45,7 @@ export enum RECIPES_CATEGORY{
 
 export interface IRecipeDB{
     id: string,
-    name: string,
+    title: string,
     ingredients: string[],
     cooking: string[],
     description: string,

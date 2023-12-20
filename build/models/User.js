@@ -2,18 +2,22 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 class User {
-    constructor(id, fullName, nickname, password, email, createdAt, avatar, role) {
+    constructor(id, idProfile, fullName, nickname, password, email, avatar, role, createdAt) {
         this.id = id;
+        this.idProfile = idProfile;
         this.fullName = fullName;
         this.nickname = "@" + nickname.toLowerCase();
         this.password = password;
         this.email = email;
-        this.createdAt = createdAt;
         this.avatar = avatar;
         this.role = role;
+        this.createdAt = createdAt;
     }
     getId() {
         return this.id;
+    }
+    getIdProfile() {
+        return this.idProfile;
     }
     getFullName() {
         return this.fullName;
@@ -50,6 +54,18 @@ class User {
     }
     getCreatedAt() {
         return this.createdAt;
+    }
+    getAll() {
+        this.getId(),
+            this.getIdProfile(),
+            this.getFullName(),
+            this.getNickname(),
+            this.getPassword(),
+            this.getEmail(),
+            this.getPassword(),
+            this.getAvatar(),
+            this.getRole(),
+            this.getPassword();
     }
 }
 exports.User = User;

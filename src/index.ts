@@ -9,10 +9,14 @@ import path from 'path';
 import authRouter from './router/auth'
 
 import RecipesRouter from './router/recipes';
+import ProductsRouter from './router/products';
+import PurchasesRouter from './router/purchases';
+import UsersRouter from './router/users';
 
 const recipesRouter = new RecipesRouter();
-
-
+const usersRouter = new UsersRouter();
+const productsRouter = new ProductsRouter();
+const purchasesRouter = new PurchasesRouter();
 const app : Application = express();
 
 
@@ -27,8 +31,10 @@ app.get("/ping", (req: Request, res: Response) => {
   res.send("Pong");
 });
 
-app.use('/recipes', recipesRouter.getRouter());
-
+app.use('/api/recipes', recipesRouter.getRouter());
+app.use('/api/products', productsRouter.getRouter());
+app.use('/api/users', usersRouter.getRouter());
+app.use('/api/purchases', purchasesRouter.getRouter());
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

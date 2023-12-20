@@ -4,35 +4,38 @@ import { USER_ROLES } from "../interfaces/interfaces";
 
 export class User {
   private readonly id: string;
+  private idProfile: string;
   private fullName: string;
   private nickname: string;
   private email: string;
   private password: string;
-  private createdAt: string;
   private avatar: string;
   private role: USER_ROLES;
+  private createdAt: string;
   //private nicknamePassword : string;
 
 
   constructor(
     id: string,
+    idProfile: string,
     fullName: string,
     nickname: string,
     password: string,
     email: string,
-    createdAt: string,
     avatar: string,
-    role: USER_ROLES,
+    role: USER_ROLES,   
+    createdAt: string
   //  namePassword:string
   ) {
     this.id = id;
+    this.idProfile = idProfile;
     this.fullName = fullName;
     this.nickname = "@" + nickname.toLowerCase();
     this.password = password;
     this.email = email;
-    this.createdAt = createdAt;
     this.avatar = avatar;
-    this.role = role;
+    this.role = role;   
+    this.createdAt = createdAt;
    // this.nicknamePassword = nickname + password
   }
 
@@ -42,7 +45,9 @@ export class User {
     return this.id;
   }
 
-
+  public getIdProfile(): string {
+    return this.idProfile;
+  }
 
   public getFullName(): string {
     return this.fullName;
@@ -91,6 +96,20 @@ export class User {
   public getCreatedAt(): string {
     return this.createdAt;
   }
+
+  public getAll():void{
+    this.getId(),
+    this.getIdProfile(),
+    this.getFullName(),
+    this.getNickname(),
+    this.getPassword(),
+    this.getEmail(),
+    this.getPassword(),
+    this.getAvatar(),
+    this.getRole(),
+    this.getPassword()
+  }
+
  /* public getNicknamePassword(): string {
     return this.nicknamePassword;
   }
