@@ -1,0 +1,56 @@
+[
+    {
+      "id": "2e9e93ff-6ce7-429f-80f4-8e2c903aaf64",
+      "title": "Beterrabas Assadas",
+      "ingredients": ["1kg de Beterraba", "1Unidade TEMPERO VEGETAIS"],
+      "cooking": ["Corte a beterraba em rodelas", "Leve em uma forma grande", "Salteie o pacote de tempero de vegetais a gosto", "adicione SAL A GOSTO", "Leve ao forno por 40 minutos"],
+      "description": "Receita refrescante e cheia de vitaminas para seu café da manhã.",
+      "imgUrl": "https://i.postimg.cc/L64csHyz/beterrabas-assadas.jpg",
+      "category": "Vegetais"
+    },
+    {
+      "id": "47fb78ff-0167-4fd7-a6bb-c44e768e9e5",
+      "title": "Mix de Vegetais",
+      "ingredients": ["4 tomates", "2 cenouras", "2 pepinos"],
+      "cooking": ["picar todos os vegetais", "por sal e vinagre a gosto", "levar a geladeira por 3 horas"],
+      "description": "Receita refrescante e cheia de vitaminas para seu café da manhã.",
+      "imgUrl": "https://i.postimg.cc/5tZZnLSJ/mix-de-vegetais.jpg",
+      "category": "vegetais"
+    },
+    {
+      "id": "c24d78ff-0167-4fd7-a6bb-c44e768e9e5", 
+      "title": "Prato Oriental",
+      "ingredients": ["1kg cenouras", "0.5kg pepinos", "1P Pacote de brotos de soja", "1Unidade SHOYU"],
+      "cooking": ["coloque tudo em uma panela grande com 1/2 litro de agua", "deixe cozinhar por 30 minutos", "Retire a agua de sobra", "tempere com shoyu e sal a gosto"],
+      "description": "Receita refrescante e cheia de vitaminas para seu café da manhã.",
+      "imgUrl": "https://i.postimg.cc/PxVvgfNd/prato-oriental.jpg",
+      "category": "vegetais"
+    },
+    {
+      "id": "a3624954-9ed7-11ee-8c90-0242ac120002",
+      "title": "Salada de Frutas",
+      "ingredients": ["Banana", "Maçã", "Morango", "Kiwi"],
+      "cooking": ["Corte as frutas em pedaços", "Misture delicadamente"],
+      "description": "Uma salada de frutas refrescante e saudável.",
+      "imgUrl": "https://i.postimg.cc/Hkp9JGkX/salada-de-frutas.jpg",
+      "category": "frutas"
+    },
+    {
+      "id": "d28cb682-fdd5-4c41-8b5a-8b8770f61d4b",
+      "title": "Sopa de Abóbora",
+      "ingredients": ["Abóbora", "Cebola", "Alho", "Caldo de legumes"],
+      "cooking": ["Cozinhe os ingredientes até ficarem macios", "Bata no liquidificador"],
+      "description": "Uma sopa cremosa e reconfortante de abóbora.",
+      "imgUrl": "https://i.postimg.cc/Kzg8QV4Y/sopa-abobora.jpg",
+      "category": "vegetais"
+    },
+    {
+      "id": "d6699546-9ed7-11ee-8c90-0242ac120002",
+      "title": "Smoothie de Manga",
+      "ingredients": ["Manga", "Iogurte", "Mel", "Gelo"],
+      "cooking": ["Bata todos os ingredientes no liquidificador"],
+      "description": "Um smoothie tropical e delicioso.",
+      "imgUrl": "https://i.postimg.cc/fbDyz5H2/8c95a1bf5cb2b5f8dbee41b014cbd56a-agua-cremosa-de-mango-1080-850.jpg",
+      "category": "smoothies"
+    }
+  ]

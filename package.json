@@ -8,7 +8,7 @@
         "start": "clear && node ./src/index.js",
         "cinco": "tsc && node ./build/index.js",
         "build": "tsc",
-        "dev": "tsnd ./src/index.ts && nodemon ./build/index.js"
+        "dev": "concurrently  \"tsc -w\" \"nodemon build/index.js\""
     },
     "keywords": [
         "backend-fruta-e-fruto"
@@ -32,7 +32,8 @@
         "@types/sqlite3": "^3.1.11",
         "@types/uuid": "^9.0.2",
         "colors": "^1.4.0",
-        "nodemon": "^3.0.1",
+        "concurrently": "^8.2.2",
+        "nodemon": "^3.0.2",
         "ts-node-dev": "^2.0.0",
         "typescript": "^5.0.4",
         "zod": "^3.22.2"
