@@ -10,7 +10,7 @@ export class PurchaseDetails {
     private totalDiscount: number = 0;
     private finalPrice: number = 0;
     private totalItems: number = 0;
-    private paymentType: PAYMENT_TYPES;
+\
     private buyerId?: string | undefined;
     private accountId?: string | undefined;
 

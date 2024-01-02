@@ -14,6 +14,17 @@ class PurchasesController {
     constructor() {
         this.getAllPurchases = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
+                const { total, products, client } = req.body;
+                const cartTotal = Number(total);
+                let buyerRole = client;
+                if (!buyerRole || buyerRole === "") {
+                    buyerRole = "Anonimo";
+                    return buyerRole;
+                }
+                else {
+                    buyerRole = "Client";
+                    return buyerRole;
+                }
                 res.status(200);
                 res.json(`endpoints purchases`);
             }
