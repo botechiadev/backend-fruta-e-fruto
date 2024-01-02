@@ -9,13 +9,15 @@ class UsersController {
     try {
       const q = req.query.q as string | undefined;
       const userDatabase = new UserDatabase();
-      const usersData: IUserDB[] | undefined[] = await userDatabase.findUsers(q);
-      const userFirst = usersData[0];
+      const [usersData]= await userDatabase.findUsers(q);
+      const userFirst = [usersData][0];
 
-      if (!userFirst) {
-        res.status(404).json({ message: "User not found" });
+      if (!usersData) {
+        res.status(404)
+        throw new Error( "User not found" );
       } else {
-        const result= usersData
+        const result = usersData
+       
         res.status(200).json({ message: "User result", result });
       }
     } catch (error) {

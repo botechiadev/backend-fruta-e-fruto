@@ -9,9 +9,9 @@ export enum PRODUCTS_CATEGORY {
 
 export interface IProductDB {
     id: string;
-    name: string;
+    item: string;
     description: string;
-    imageUrl: string;
+    image_url: string;
     price: number;
     category: PRODUCTS_CATEGORY;
 }

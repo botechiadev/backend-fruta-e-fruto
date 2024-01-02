@@ -1,10 +1,23 @@
-import { Router, Request, Response } from "express";
-const router: Router = Router();
+import express, { Router } from "express";
+import SignInController from "./../controllers/signInController";
 
+class AuthRouter {
+  private router: Router;
+  private signInController: SignInController
 
+  constructor() {
+    this.router = express.Router();
+    this.signInController = new SignInController();
+    this.setupRoutes();
+  }
 
-router.get('/', (req:Request, res:Response)=>{
-    res.send('HELLO WORD')
-})
+  private setupRoutes() {
+    this.router.post("/", this.signInController.getUserByNickname);
+  }
 
-export default Router;
+  getRouter() {
+    return this.router;
+  }
+}
+
+export default AuthRouter;

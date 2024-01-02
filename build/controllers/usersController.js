@@ -16,10 +16,11 @@ class UsersController {
             try {
                 const q = req.query.q;
                 const userDatabase = new UserDatabase_1.UserDatabase();
-                const usersData = yield userDatabase.findUsers(q);
-                const userFirst = usersData[0];
-                if (!userFirst) {
-                    res.status(404).json({ message: "User not found" });
+                const [usersData] = yield userDatabase.findUsers(q);
+                const userFirst = [usersData][0];
+                if (!usersData) {
+                    res.status(404);
+                    throw new Error("User not found");
                 }
                 else {
                     const result = usersData;
