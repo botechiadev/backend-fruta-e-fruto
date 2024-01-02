@@ -29,8 +29,8 @@ export class User {
   ) {
     this.id = id;
     this.idProfile = idProfile;
-    this.fullName = fullName;
-    this.nickname = "@" + nickname.toLowerCase();
+    this.fullName = fullName.toUpperCase();
+    this.nickname = nickname.toLowerCase();
     this.password = password;
     this.email = email;
     this.avatar = avatar;

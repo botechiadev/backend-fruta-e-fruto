@@ -1,22 +1,35 @@
 import { Request, Response } from "express";
 import { UserDatabase } from "../database/UserDatabase";
 import { User } from "../models/User";
-import { IUserDB } from "../interfaces/interfaces";
+import { IAccountDB, IUserDB } from "../interfaces/interfaces";
 import { today } from "../helpers/helpers";
-import uuidv4 from 'uuid'
+import { v4 as uuidv4 } from 'uuid';
+import { UserWithAccount } from "../models/UserWithAccount";
+import { AccountsDatabase } from "../database/AccountsDatabase";
 class UsersController {
   async getAllUsers(req: Request, res: Response) {
     try {
       const q = req.query.q as string | undefined;
       const userDatabase = new UserDatabase();
-      const [usersData]= await userDatabase.findUsers(q);
-      const userFirst = [usersData][0];
-
-      if (!usersData) {
+      const usersData= await userDatabase.findUsers(q);
+      
+      if (!usersData[0]) {
         res.status(404)
         throw new Error( "User not found" );
       } else {
-        const result = usersData
+        const result:User[] = usersData.map((user)=>{
+            return new User(
+              user.id,
+              user.idProfile,
+              user.fullName,
+              user.nickname,
+              user.password,
+              user.email,
+              user.avatar,
+              user.role,
+              user.createdAt
+            )
+        })
        
         res.status(200).json({ message: "User result", result });
       }
@@ -36,7 +49,17 @@ class UsersController {
       if (!userFirst) {
         res.status(404).json({ message: "User not found" });
       } else {
-        const result = usersDB
+        const result = new User(
+          userFirst.id,
+          userFirst.id,
+          userFirst.fullName,
+          userFirst.nickname,
+          userFirst.password,
+          userFirst.email,
+          userFirst.avatar,
+          userFirst.role,
+          userFirst.createdAt
+        )
         res.status(200).json({ message: "User found", result });
       }
     } catch (error) {
@@ -47,11 +70,62 @@ class UsersController {
 
   async createUser(req: Request, res: Response) {
     try {
-      const result = {
-        id: Math.random().toString()
-      }
-      // ... (seu código existente para a criação de usuário)
-      res.status(201).json({ message: "User created successfully", result });
+    
+
+      const {id, fullName, nickname, email, password, avatar, role } = req.body
+    
+      const newAccount = uuidv4();
+
+
+    const newInstanceUser = new UserWithAccount(
+      id,
+      newAccount,
+      fullName,
+      nickname,
+      password,
+      email,
+      avatar,
+      role,
+      today,
+      0,
+      0,
+      today,
+      'blue'
+    )
+
+
+    const objUser : IUserDB={
+      id: newInstanceUser.getId(),
+      idProfile: newInstanceUser.getIdProfile(),
+      fullName: newInstanceUser.getFullName(),
+      nickname: newInstanceUser.getNickname(),
+      password: newInstanceUser.getPassword(),
+      email: newInstanceUser.getEmail(),
+      avatar: newInstanceUser.getAvatar(),
+      role: newInstanceUser.getRole(),
+      createdAt: newInstanceUser.getCreatedAt()
+    }
+
+    const userDatabase = new UserDatabase()
+    await userDatabase.insertUser(objUser)
+
+    const objAccount :IAccountDB={
+      id: newInstanceUser.getIdProfile(),
+      user_id: newInstanceUser.getId(),
+      balance: newInstanceUser.getBalance(),
+      score: newInstanceUser.getScore(),
+      category: newInstanceUser.getCategory()
+    }
+
+
+    const accountsDatabase = new AccountsDatabase();
+    await accountsDatabase.insertAccount(objAccount)
+
+
+
+                        
+
+      res.status(201).json({ message: "Usuario criado com sucesso" });
     } catch (error) {
       console.error(error);
       res.status(500).send(error instanceof Error ? error.message : "Unexpected error");

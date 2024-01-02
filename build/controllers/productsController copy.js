@@ -131,11 +131,6 @@ class ProductController {
                 const { item, description, imageUrl, price, category } = req.body;
                 const productsDatabase = new ProductsDatabase_1.ProductsDatabase();
                 const productExists = yield productsDatabase.findProductById(id);
-                const regex = /^(https?:\/\/[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}([-a-zA-Z0-9@:%_\+.~#?&//=]*)?)$/;
-                if (!regex.test(imageUrl)) {
-                    res.status(400);
-                    throw new Error('"400" URL para imagem invalida');
-                }
                 if (!productExists[0]) {
                     res.status(404);
                     throw new Error(`"404" Produto com ${id} não foi encontrado`);
@@ -182,4 +177,4 @@ class ProductController {
 }
 exports.ProductController = ProductController;
 exports.default = ProductController;
-//# sourceMappingURL=productsController.js.map
+//# sourceMappingURL=productsController%20copy.js.map

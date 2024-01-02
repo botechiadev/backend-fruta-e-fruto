@@ -1,5 +1,7 @@
 import express , {Application, Request, Response} from 'express'
-
+import dotenv from 'dotenv'
+dotenv.config()
+const port = Number(process.env.PORT)|| 3000
 
 
 import cors from "cors";
@@ -37,9 +39,8 @@ app.use('/api/recipes', recipesRouter.getRouter());
 app.use('/api/products', productsRouter.getRouter());
 app.use('/api/users', usersRouter.getRouter());
 app.use('/api/purchases', purchasesRouter.getRouter());
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
 });
 
 

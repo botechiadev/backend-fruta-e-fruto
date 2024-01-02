@@ -22,7 +22,7 @@ class PurchasesController {
                     return buyerRole;
                 }
                 else {
-                    buyerRole = "Client";
+                    buyerRole = "Cliente";
                     return buyerRole;
                 }
                 res.status(200);

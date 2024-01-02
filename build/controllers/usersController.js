@@ -10,20 +10,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const UserDatabase_1 = require("../database/UserDatabase");
+const User_1 = require("../models/User");
+const helpers_1 = require("../helpers/helpers");
+const uuid_1 = require("uuid");
+const UserWithAccount_1 = require("../models/UserWithAccount");
+const AccountsDatabase_1 = require("../database/AccountsDatabase");
 class UsersController {
     getAllUsers(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const q = req.query.q;
                 const userDatabase = new UserDatabase_1.UserDatabase();
-                const [usersData] = yield userDatabase.findUsers(q);
-                const userFirst = [usersData][0];
-                if (!usersData) {
+                const usersData = yield userDatabase.findUsers(q);
+                if (!usersData[0]) {
                     res.status(404);
                     throw new Error("User not found");
                 }
                 else {
-                    const result = usersData;
+                    const result = usersData.map((user) => {
+                        return new User_1.User(user.id, user.idProfile, user.fullName, user.nickname, user.password, user.email, user.avatar, user.role, user.createdAt);
+                    });
                     res.status(200).json({ message: "User result", result });
                 }
             }
@@ -44,7 +50,7 @@ class UsersController {
                     res.status(404).json({ message: "User not found" });
                 }
                 else {
-                    const result = usersDB;
+                    const result = new User_1.User(userFirst.id, userFirst.id, userFirst.fullName, userFirst.nickname, userFirst.password, userFirst.email, userFirst.avatar, userFirst.role, userFirst.createdAt);
                     res.status(200).json({ message: "User found", result });
                 }
             }
@@ -57,10 +63,32 @@ class UsersController {
     createUser(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const result = {
-                    id: Math.random().toString()
+                const { id, fullName, nickname, email, password, avatar, role } = req.body;
+                const newAccount = (0, uuid_1.v4)();
+                const newInstanceUser = new UserWithAccount_1.UserWithAccount(id, newAccount, fullName, nickname, password, email, avatar, role, helpers_1.today, 0, 0, helpers_1.today, 'blue');
+                const objUser = {
+                    id: newInstanceUser.getId(),
+                    idProfile: newInstanceUser.getIdProfile(),
+                    fullName: newInstanceUser.getFullName(),
+                    nickname: newInstanceUser.getNickname(),
+                    password: newInstanceUser.getPassword(),
+                    email: newInstanceUser.getEmail(),
+                    avatar: newInstanceUser.getAvatar(),
+                    role: newInstanceUser.getRole(),
+                    createdAt: newInstanceUser.getCreatedAt()
                 };
-                res.status(201).json({ message: "User created successfully", result });
+                const userDatabase = new UserDatabase_1.UserDatabase();
+                yield userDatabase.insertUser(objUser);
+                const objAccount = {
+                    id: newInstanceUser.getIdProfile(),
+                    user_id: newInstanceUser.getId(),
+                    balance: newInstanceUser.getBalance(),
+                    score: newInstanceUser.getScore(),
+                    category: newInstanceUser.getCategory()
+                };
+                const accountsDatabase = new AccountsDatabase_1.AccountsDatabase();
+                yield accountsDatabase.insertAccount(objAccount);
+                res.status(201).json({ message: "Usuario criado com sucesso" });
             }
             catch (error) {
                 console.error(error);

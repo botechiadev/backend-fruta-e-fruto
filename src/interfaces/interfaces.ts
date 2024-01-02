@@ -3,7 +3,10 @@ import { PurchaseItem } from "../models/PurchaseItem";
 export enum PRODUCTS_CATEGORY {
     'horti-fruti',
     'laticinios',
-    'armazem'
+    'armazem',
+    'limpeza',
+    'papelaria',
+    'higiene-pessoal'
 }
 
 
@@ -79,4 +82,12 @@ export interface IPurchaseItem {
   unityPrice: number,
   totalPrice : number,
   purchase_id: string
+}
+
+export interface IAccountDB{
+    id :string,
+    user_id : string,
+    balance : number,
+    score :number,
+    category: string
 }

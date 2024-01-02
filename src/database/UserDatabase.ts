@@ -5,7 +5,7 @@ import {BaseDatabase} from './BaseDatabase'
 export class UserDatabase extends BaseDatabase{
  public static TABLE_USERS = "users"
  
- async findUsers(q:string|undefined):Promise<IUserDB[]|undefined[]>{
+ async findUsers(q:string|undefined):Promise<IUserDB[]>{
 
 
   if(!q){
@@ -24,7 +24,7 @@ export class UserDatabase extends BaseDatabase{
 
 
 
-async findUserById(id:string):Promise<IUserDB[]|undefined[]>{
+async findUserById(id:string):Promise<IUserDB[]>{
 
   const result = await BaseDatabase.connection(UserDatabase.TABLE_USERS).
   where( "id","LIKE", `%${id}%`)

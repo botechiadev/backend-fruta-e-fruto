@@ -4,6 +4,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
+const port = Number(process.env.PORT) || 3000;
 const cors_1 = __importDefault(require("cors"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const morgan_1 = __importDefault(require("morgan"));
@@ -34,9 +37,8 @@ app.use('/api/recipes', recipesRouter.getRouter());
 app.use('/api/products', productsRouter.getRouter());
 app.use('/api/users', usersRouter.getRouter());
 app.use('/api/purchases', purchasesRouter.getRouter());
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
 });
 exports.default = app;
 //# sourceMappingURL=index.js.map

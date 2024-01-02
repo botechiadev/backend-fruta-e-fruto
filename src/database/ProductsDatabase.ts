@@ -3,7 +3,7 @@ import {BaseDatabase} from './BaseDatabase'
 
 export class ProductsDatabase extends BaseDatabase{
  public static TABLE_PRODUCTS = "products"
- async findProducts(q:string|undefined):Promise<IProductDB[]|undefined[]>{
+ async findProducts(q:string|undefined):Promise<IProductDB[]>{
 
 
   if(!q){
@@ -22,7 +22,7 @@ export class ProductsDatabase extends BaseDatabase{
 
 
 
-async findProductById(id:string):Promise<IProductDB[]|undefined[]>{
+async findProductById(id:string):Promise<IProductDB[]>{
 
   const result = await BaseDatabase.connection(ProductsDatabase.TABLE_PRODUCTS).
   where( "id","LIKE", `%${id}%`)

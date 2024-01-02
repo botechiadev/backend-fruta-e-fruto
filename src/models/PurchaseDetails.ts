@@ -10,7 +10,7 @@ export class PurchaseDetails {
     private totalDiscount: number = 0;
     private finalPrice: number = 0;
     private totalItems: number = 0;
-\
+    private paymentType: PAYMENT_TYPES;
     private buyerId?: string | undefined;
     private accountId?: string | undefined;
 
@@ -29,7 +29,6 @@ export class PurchaseDetails {
         this.accountId = accountId;
         // Inicializa os valores iniciais chamando os métodos correspondentes
         this.calculateTotalItems();
-
         this.calculateTotalDiscount();
         this.calculateFinalPrice();
     }
@@ -117,8 +116,7 @@ export class PurchaseDetails {
         this.purchaseList.push(item);
         // Atualiza os valores dependentes
         this.calculateTotalItems();
-
-        this.calculateTotalDiscount();
+                this.calculateTotalDiscount();
         this.calculateFinalPrice();
     }
 
