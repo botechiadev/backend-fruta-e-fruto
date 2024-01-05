@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductController = void 0;
+const AccountsDatabase_1 = require("./../database/AccountsDatabase");
 const Product_1 = require("./../models/Product");
 const ProductsDatabase_1 = require("./../database/ProductsDatabase");
 const uuid_1 = require("uuid");
@@ -169,7 +170,10 @@ class ProductController {
         this.destroyProduct = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const id = req.params.id;
+                const accountId = req.headers.Header;
                 const productsDatabase = new ProductsDatabase_1.ProductsDatabase();
+                const accountsDatabase = new AccountsDatabase_1.AccountsDatabase();
+                yield accountsDatabase.destroyProduct(accountId);
                 yield productsDatabase.destroyProduct(id);
                 res.status(200);
                 res.json(`produto com id ${id} deletado com sucesso`);

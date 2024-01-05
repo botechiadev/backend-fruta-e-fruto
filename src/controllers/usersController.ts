@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { UserDatabase } from "../database/UserDatabase";
 import { User } from "../models/User";
-import { IAccountDB, IUserDB } from "../interfaces/interfaces";
+import { IAccountDB, IProductDB, IUserDB } from "../interfaces/interfaces";
 import { today } from "../helpers/helpers";
 import { v4 as uuidv4 } from 'uuid';
 import { UserWithAccount } from "../models/UserWithAccount";
@@ -67,7 +67,7 @@ class UsersController {
       res.status(500).send(error instanceof Error ? error.message : "Unexpected error");
     }
   }
-
+/*************************create user********************************** */
   async createUser(req: Request, res: Response) {
     try {
     
@@ -132,13 +132,79 @@ class UsersController {
     }
   }
 
+
+
+/*************************edit user******************************* */
   async editUserById(req: Request, res: Response) {
     try {
-      const result = {
-        id: Math.random().toString()
+      const id = req.params.id;
+      const { nickname, email, password, avatar, role } = req.body
+
+      const usersDatabase = new UserDatabase();
+      const userExist =await usersDatabase.findUserId(id)
+
+      if(!userExist){
+        res.status(404)
+        throw new Error('"404": Usuario Nao Cadastrado')
       }
+
+      const user4Edit = await usersDatabase.findUserById(id)
+
+      const inst4Edit = new User(
+        user4Edit[0].id,
+        user4Edit[0].idProfile,
+        user4Edit[0].fullName,
+        user4Edit[0].nickname,
+        user4Edit[0].password,
+        user4Edit[0].email,
+        user4Edit[0].avatar,
+        user4Edit[0].role,
+        user4Edit[0].createdAt
+      )
+
+   nickname !== inst4Edit.getNickname()? inst4Edit.setNickname(nickname):inst4Edit.getNickname()
+    password !== inst4Edit.getPassword()? inst4Edit.setPassword(password):inst4Edit.getPassword()
+      email !== inst4Edit.getEmail()? inst4Edit.setEmail(email):inst4Edit.getEmail()
+      avatar !== inst4Edit.getAvatar()? inst4Edit.setEmail(email):inst4Edit.getEmail()
+
+      const obj4Update:IUserDB={
+        id,
+        idProfile: inst4Edit.getIdProfile(),
+        fullName: inst4Edit.getFullName(),
+        nickname: inst4Edit.getNickname(),
+        email: inst4Edit.getEmail(),
+        password: inst4Edit.getPassword(),
+        avatar: inst4Edit.getAvatar(), 
+        role: inst4Edit.getRole(), 
+        createdAt: inst4Edit.getCreatedAt()
+      }
+
+      
+
+      await usersDatabase.updateUser(obj4Update, id)
+
+  
+      const usersData= await usersDatabase.findUserById(id);
+        
+      if (!usersData[0]) {
+        res.status(400)
+        throw new Error( "Cadastro nao completado" );
+      } else {
+        const user = usersData[0]
+        const result:User = new User(
+              user.id,
+              user.idProfile,
+              user.fullName,
+              user.nickname,
+              user.password,
+              user.email,
+              user.avatar,
+              user.role,
+              user.createdAt
+            )
       // ... (seu código existente para a edição de usuário)
       res.status(200).json({ message: "User updated successfully", result });
+        }
     } catch (error) {
       console.error(error);
       res.status(500).send(error instanceof Error ? error.message : "Unexpected error");

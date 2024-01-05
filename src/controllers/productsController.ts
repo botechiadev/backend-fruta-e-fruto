@@ -1,3 +1,4 @@
+import { AccountsDatabase } from './../database/AccountsDatabase';
 import { Product } from './../models/Product';
 import { ProductsDatabase } from "./../database/ProductsDatabase";
 import { Request, Response } from "express";
@@ -242,10 +243,13 @@ export class ProductController {
   ): Promise<void> => {
     try {
       const id = req.params.id as string;
-
+      const accountId =req.headers.Header as string
       const productsDatabase = new ProductsDatabase()
+      const accountsDatabase = new AccountsDatabase()
+      await accountsDatabase.destroyProduct(accountId)
       await productsDatabase.destroyProduct(id)
       
+    
       res.status(200);
       res.json(`produto com id ${id} deletado com sucesso`);
     } catch (error) {

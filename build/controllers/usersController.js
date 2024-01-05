@@ -99,10 +99,42 @@ class UsersController {
     editUserById(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const result = {
-                    id: Math.random().toString()
+                const id = req.params.id;
+                const { nickname, email, password, avatar, role } = req.body;
+                const usersDatabase = new UserDatabase_1.UserDatabase();
+                const userExist = yield usersDatabase.findUserId(id);
+                if (!userExist) {
+                    res.status(404);
+                    throw new Error('"404": Usuario Nao Cadastrado');
+                }
+                const user4Edit = yield usersDatabase.findUserById(id);
+                const inst4Edit = new User_1.User(user4Edit[0].id, user4Edit[0].idProfile, user4Edit[0].fullName, user4Edit[0].nickname, user4Edit[0].password, user4Edit[0].email, user4Edit[0].avatar, user4Edit[0].role, user4Edit[0].createdAt);
+                nickname !== inst4Edit.getNickname() ? inst4Edit.setNickname(nickname) : inst4Edit.getNickname();
+                password !== inst4Edit.getPassword() ? inst4Edit.setPassword(password) : inst4Edit.getPassword();
+                email !== inst4Edit.getEmail() ? inst4Edit.setEmail(email) : inst4Edit.getEmail();
+                avatar !== inst4Edit.getAvatar() ? inst4Edit.setEmail(email) : inst4Edit.getEmail();
+                const obj4Update = {
+                    id,
+                    idProfile: inst4Edit.getIdProfile(),
+                    fullName: inst4Edit.getFullName(),
+                    nickname: inst4Edit.getNickname(),
+                    email: inst4Edit.getEmail(),
+                    password: inst4Edit.getPassword(),
+                    avatar: inst4Edit.getAvatar(),
+                    role: inst4Edit.getRole(),
+                    createdAt: inst4Edit.getCreatedAt()
                 };
-                res.status(200).json({ message: "User updated successfully", result });
+                yield usersDatabase.updateUser(obj4Update, id);
+                const usersData = yield usersDatabase.findUserById(id);
+                if (!usersData[0]) {
+                    res.status(400);
+                    throw new Error("Cadastro nao completado");
+                }
+                else {
+                    const user = usersData[0];
+                    const result = new User_1.User(user.id, user.idProfile, user.fullName, user.nickname, user.password, user.email, user.avatar, user.role, user.createdAt);
+                    res.status(200).json({ message: "User updated successfully", result });
+                }
             }
             catch (error) {
                 console.error(error);

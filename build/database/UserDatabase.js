@@ -51,7 +51,7 @@ class UserDatabase extends BaseDatabase_1.BaseDatabase {
     findUserId(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const result = yield BaseDatabase_1.BaseDatabase.connection.
-                raw(`SELECT id FROM ${UserDatabase.TABLE_USERS} WHERE id LIKE ${id}`);
+                raw(`SELECT id FROM ${UserDatabase.TABLE_USERS} WHERE id LIKE "%${id}%"`);
             const userId = result;
             return userId;
         });

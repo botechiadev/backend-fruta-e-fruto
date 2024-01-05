@@ -27,7 +27,7 @@ class AccountsDatabase extends BaseDatabase_1.BaseDatabase {
             }
         });
     }
-    findProductById(id) {
+    findAccountById(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const result = yield BaseDatabase_1.BaseDatabase.connection(AccountsDatabase.TABLE_ACCOUNTS).where("id", "LIKE", `%${id}%`);
             const ProductsDB = result;
@@ -63,10 +63,10 @@ class AccountsDatabase extends BaseDatabase_1.BaseDatabase {
             yield BaseDatabase_1.BaseDatabase.connection(AccountsDatabase.TABLE_ACCOUNTS).insert(Account4Insert);
         });
     }
-    updateProduct(Product4Update, id) {
+    updateAccount(Account4Update, id) {
         return __awaiter(this, void 0, void 0, function* () {
             yield BaseDatabase_1.BaseDatabase.connection(AccountsDatabase.TABLE_ACCOUNTS).
-                update(Product4Update).
+                update(Account4Update).
                 where({ id: `${id}` });
         });
     }

@@ -49,7 +49,7 @@ async findUserByNicknames(nickname:string, password:string):Promise<string>{
 async findUserId(id:string):Promise<string>{
 
   const result = await BaseDatabase.connection.
-  raw(`SELECT id FROM ${UserDatabase.TABLE_USERS} WHERE id LIKE ${id}`)
+  raw(`SELECT id FROM ${UserDatabase.TABLE_USERS} WHERE id LIKE "%${id}%"`)
  
 
     const userId = result

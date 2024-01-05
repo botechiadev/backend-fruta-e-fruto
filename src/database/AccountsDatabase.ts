@@ -21,7 +21,7 @@ export class AccountsDatabase extends BaseDatabase{
 
 
 
-async findProductById(id:string):Promise<IProductDB[]>{
+async findAccountById(id:string):Promise<IAccountDB[]>{
 
   const result = await BaseDatabase.connection(AccountsDatabase.TABLE_ACCOUNTS).where( "id","LIKE", `%${id}%`)
 
@@ -65,9 +65,9 @@ await BaseDatabase.connection(AccountsDatabase.TABLE_ACCOUNTS).insert(Account4In
   
 }
 
-async updateProduct (Product4Update: IProductDB, id:string):Promise<void>{
+async updateAccount (Account4Update: IAccountDB, id:string):Promise<void>{
   await BaseDatabase.connection(AccountsDatabase.TABLE_ACCOUNTS).
-  update(Product4Update).
+  update(Account4Update).
   where({ id: `${id}` });
   }
 
@@ -75,4 +75,5 @@ async updateProduct (Product4Update: IProductDB, id:string):Promise<void>{
   await BaseDatabase.connection(AccountsDatabase.TABLE_ACCOUNTS).
   delete().where({ id: idToDelete });
  } 
+ 
 }

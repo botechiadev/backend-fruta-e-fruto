@@ -5,8 +5,8 @@ class User {
     constructor(id, idProfile, fullName, nickname, password, email, avatar, role, createdAt) {
         this.id = id;
         this.idProfile = idProfile;
-        this.fullName = fullName.toUpperCase();
-        this.nickname = nickname.toLowerCase();
+        this.fullName = fullName;
+        this.nickname = nickname;
         this.password = password;
         this.email = email;
         this.avatar = avatar;
