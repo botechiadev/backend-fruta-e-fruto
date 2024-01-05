@@ -8,7 +8,7 @@ import { User } from '../models/User';
 import { AccountsDatabase } from '../database/AccountsDatabase';
 import { UserWithAccount } from '../models/UserWithAccount';
 import { IUserDB, IAccountDB, IPurchaseDB, ISale4PurchaseDB, USER_ROLES, IPurchaseTicket } from './../interfaces/interfaces';
-import {text} from './../types/types'
+import {text} from '../types/types'
 import { UserDatabase } from './../database/UserDatabase';
 import { SalesDatabase } from './../database/SalesDatabase';
 
@@ -191,22 +191,118 @@ export class PurchasesController {
           }
     };
 
-    public getAllPurchases = async (req: Request, res: Response): Promise<void> => {
+    public getAllPurchases = (async (req: Request, res: Response): Promise<void> => {
         try {
-            const result = { id: Math.random().toString() };
-            res.status(200).json({ message: `produto inserido e instanciado`, result });
-        } catch (error) {
-            res.status(500).json({ error });
-        }
-    };
 
+    
+         const purchaseDatabase = new PurchaseDatabase()
+         const purchaseDB = await purchaseDatabase.findPurchases()
+
+        if(!purchaseDB[0]){
+            res.status(404)
+            throw new Error("404: Nenhum pagamento cadastrado")
+        }
+
+         const result: Purchase[] = purchaseDB.map((purchase:IPurchaseDB)=>{
+            return new Purchase(
+                purchase.id,
+                purchase.buyer_id,
+                Number(purchase.finalPrice),
+                purchase.created_at
+            )
+         })
+        
+
+        res.send({message: "Lista de pagamentos Cadastrados", result}) 
+                } catch (error) {
+                    console.log(error);
+              
+                    if (req.statusCode === 200) {
+                      res.status(500);
+                    }
+              
+                    if (error instanceof Error) {
+                      res.send(error.message);
+                    } else {
+                      res.send("Erro inesperado");
+                    }
+                  }
+        });
+        
+
+        public getPurchaseById = (async (req: Request, res: Response): Promise<void> => {
+            try {
+            
+            const id = req.params.id
+        
+             const purchaseDatabase = new PurchaseDatabase()
+    
+            if( id === "000.000.000-00"){
+
+             const purchasesDB = await purchaseDatabase.findPurchaseByBuyerId(id)
+
+                const result: Purchase[] = purchasesDB.map((purchase:IPurchaseDB)=>{
+                    return new Purchase(
+                        purchase.id,
+                        purchase.buyer_id,
+                        Number(purchase.finalPrice),
+                        purchase.created_at
+                    )
+                 })
+
+                res.status(200).json({message: "Lista de pagamentos sem Usuario Cadastrado", result})
+            }else{
+    
+             const purchasesDB = await purchaseDatabase.findPurchaseByBuyerId(id)
+
+             if(!purchasesDB[0]){
+                res.status(404)
+                throw new Error("'404': Nenhum pagamento cadastrado ou usuario nao cadastrado")
+             }
+
+             const result: Purchase[] = purchasesDB.map((purchase:IPurchaseDB)=>{
+                return new Purchase(
+                    purchase.id,
+                    purchase.buyer_id,
+                    Number(purchase.finalPrice),
+                    purchase.created_at
+                )
+             })
+            
+    
+            res.send({message: `Lista de pagamentos Cadastrados com id ${id}`, result}) 
+            }          
+        } catch (error) {
+                        console.log(error);
+                  
+                        if (req.statusCode === 200) {
+                          res.status(500);
+                        }
+                  
+                        if (error instanceof Error) {
+                          res.send(error.message);
+                        } else {
+                          res.send("Erro inesperado");
+                        }
+                      }
+            });
     public updatePurchase = async (req: Request, res: Response): Promise<void> => {
         try {
             const id = req.params.id as string;
             res.status(200).json(`update purchase ${id}`);
         } catch (error) {
-            res.status(500).json({ error });
-        }
+            console.log(error);
+      
+            if (req.statusCode === 200) {
+              res.status(500);
+            }
+      
+            if (error instanceof Error) {
+              res.send(error.message);
+            } else {
+              res.send("Erro inesperado");
+            }
+          }
     };
 
     public destroyPurchase = async (req: Request, res: Response): Promise<void> => {

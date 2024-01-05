@@ -22,7 +22,15 @@ export class UserDatabase extends BaseDatabase{
 }
  }
 
+ async findUserByNickname(nickname:string):Promise<IUserDB[]>{
 
+  const result = await BaseDatabase.connection(UserDatabase.TABLE_USERS).
+  where( "nickname","LIKE", `%${nickname}%`)
+
+
+    const usersDB = result
+  return usersDB
+}
 
 async findUserById(id:string):Promise<IUserDB[]>{
 

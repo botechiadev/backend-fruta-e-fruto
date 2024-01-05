@@ -27,6 +27,14 @@ class UserDatabase extends BaseDatabase_1.BaseDatabase {
             }
         });
     }
+    findUserByNickname(nickname) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const result = yield BaseDatabase_1.BaseDatabase.connection(UserDatabase.TABLE_USERS).
+                where("nickname", "LIKE", `%${nickname}%`);
+            const usersDB = result;
+            return usersDB;
+        });
+    }
     findUserById(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const result = yield BaseDatabase_1.BaseDatabase.connection(UserDatabase.TABLE_USERS).

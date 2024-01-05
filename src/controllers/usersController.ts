@@ -47,26 +47,61 @@ class UsersController {
       const userFirst = usersDB[0];
 
       if (!userFirst) {
-        res.status(404).json({ message: "User not found" });
+        res.status(404)
+        throw new Error( "User not found" );
       } else {
-        const result = new User(
-          userFirst.id,
-          userFirst.id,
-          userFirst.fullName,
-          userFirst.nickname,
-          userFirst.password,
-          userFirst.email,
-          userFirst.avatar,
-          userFirst.role,
-          userFirst.createdAt
-        )
-        res.status(200).json({ message: "User found", result });
-      }
+        const result:User[] = usersDB.map((user)=>{
+          return new User(
+            user.id,
+            user.idProfile,
+            user.fullName,
+            user.nickname,
+            user.password,
+            user.email,
+            user.avatar,
+            user.role,
+            user.createdAt
+          )
+      })
+
+      res.status(200).json({message: "Usuario encontrado", result})
+    }
     } catch (error) {
       console.error(error);
       res.status(500).send(error instanceof Error ? error.message : "Unexpected error");
     }
   }
+/******************get USER BY NICKNAME***************** */
+
+async getUserByNickname(req: Request, res: Response) {
+  try {
+    const nickname = req.params.nickname;
+    const userDatabase = new UserDatabase();
+    const usersDB = await userDatabase.findUserByNickname(nickname);
+    const userFirst = usersDB[0];
+
+    if (!userFirst) {
+      res.status(404).json({ message: "User not found" });
+    } else {
+      const result = new User(
+        userFirst.id,
+        userFirst.id,
+        userFirst.fullName,
+        userFirst.nickname,
+        userFirst.password,
+        userFirst.email,
+        userFirst.avatar,
+        userFirst.role,
+        userFirst.createdAt
+      )
+      res.status(200).json({ message: "User found", result });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error instanceof Error ? error.message : "Unexpected error");
+  }
+}
+
 /*************************create user********************************** */
   async createUser(req: Request, res: Response) {
     try {
