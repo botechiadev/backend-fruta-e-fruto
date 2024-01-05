@@ -3,7 +3,7 @@ import { PRODUCTS_CATEGORY } from "../interfaces/interfaces"
 export class Product{
     constructor(
      private id:string,
-     private name: string,  
+     private item: string,  
      private description:string,
      private imageUrl :string ,
      private price: number,
@@ -15,8 +15,8 @@ export class Product{
        }
 
 
-       public getName():string{
-        return this.name
+       public getItem():string{
+        return this.item
        }
 
        public getDescription():string{

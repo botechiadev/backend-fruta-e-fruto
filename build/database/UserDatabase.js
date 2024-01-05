@@ -15,14 +15,13 @@ class UserDatabase extends BaseDatabase_1.BaseDatabase {
     findUsers(q) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!q) {
-                const result = yield BaseDatabase_1.BaseDatabase.connection(UserDatabase.TABLE_USERS).whereNot("role", "LIKE", "Bands");
+                const result = yield BaseDatabase_1.BaseDatabase.connection(UserDatabase.TABLE_USERS);
                 const usersDB = result;
                 return usersDB;
             }
             else {
                 const result = yield BaseDatabase_1.BaseDatabase.connection(UserDatabase.TABLE_USERS).
-                    where("name", "LIKE", `%${q}%`).
-                    whereNot("role", "LIKE", "Bands");
+                    where("nickname", "LIKE", `%${q}%`);
                 const usersDB = result;
                 return usersDB;
             }
@@ -31,16 +30,28 @@ class UserDatabase extends BaseDatabase_1.BaseDatabase {
     findUserById(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const result = yield BaseDatabase_1.BaseDatabase.connection(UserDatabase.TABLE_USERS).
-                where("id", "LIKE", `%${id}%`).
-                whereNot("role", "LIKE", "Bands");
+                where("id", "LIKE", `%${id}%`);
             const usersDB = result;
             return usersDB;
+        });
+    }
+    findUserByNicknames(nickname, password) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const result = yield BaseDatabase_1.BaseDatabase.connection(UserDatabase.TABLE_USERS).
+                where("nickname", "LIKE", `%${nickname}%`).
+                andWhere(password = `${password}`);
+            if (result) {
+                return "bananinha";
+            }
+            else {
+                return "cajuzinho";
+            }
         });
     }
     findUserId(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const result = yield BaseDatabase_1.BaseDatabase.connection.
-                raw(`SELECT id FROM ${UserDatabase.TABLE_USERS} WHERE id LIKE ${id}`);
+                raw(`SELECT id FROM ${UserDatabase.TABLE_USERS} WHERE id LIKE "%${id}%"`);
             const userId = result;
             return userId;
         });

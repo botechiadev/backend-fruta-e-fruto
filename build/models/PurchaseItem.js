@@ -2,10 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PurchaseItem = void 0;
 class PurchaseItem {
-    constructor(id, item, quantity = 0, unityPrice = 0, totalPrice = 0, purchaseId) {
-        this.quantity = 0;
-        this.unityPrice = 0;
-        this.totalPrice = 0;
+    constructor(id, item, quantity, unityPrice, totalPrice, purchaseId) {
         this.id = id;
         this.item = item;
         this.quantity = quantity;

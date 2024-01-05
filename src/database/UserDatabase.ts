@@ -5,18 +5,17 @@ import {BaseDatabase} from './BaseDatabase'
 export class UserDatabase extends BaseDatabase{
  public static TABLE_USERS = "users"
  
- async findUsers(q:string|undefined):Promise<IUserDB[]|undefined[]>{
+ async findUsers(q:string|undefined):Promise<IUserDB[]>{
 
 
   if(!q){
-    const result: IUserDB[] = await BaseDatabase.connection(UserDatabase.TABLE_USERS).whereNot("role", "LIKE" , "Bands")
+    const result: IUserDB[] = await BaseDatabase.connection(UserDatabase.TABLE_USERS)
     const usersDB = result;
 
   return usersDB
 } else{
   const result = await BaseDatabase.connection(UserDatabase.TABLE_USERS).
-  where( "name","LIKE", `%${q}%`).
-  whereNot("role", "LIKE" , "Bands")
+  where( "nickname","LIKE", `%${q}%`)
     const usersDB = result;
 
   return usersDB
@@ -25,22 +24,32 @@ export class UserDatabase extends BaseDatabase{
 
 
 
-async findUserById(id:string):Promise<IUserDB[]|undefined[]>{
+async findUserById(id:string):Promise<IUserDB[]>{
 
   const result = await BaseDatabase.connection(UserDatabase.TABLE_USERS).
-  where( "id","LIKE", `%${id}%`).
-  whereNot("role", "LIKE" , "Bands")
+  where( "id","LIKE", `%${id}%`)
 
 
     const usersDB = result
   return usersDB
 }
+async findUserByNicknames(nickname:string, password:string):Promise<string>{
 
+  const result = await BaseDatabase.connection(UserDatabase.TABLE_USERS).
+  where( "nickname","LIKE", `%${nickname}%`).
+  andWhere(password=`${password}`)
+
+  if(result){
+    return "bananinha"
+  }else{
+    return "cajuzinho"
+  }
+}
 
 async findUserId(id:string):Promise<string>{
 
   const result = await BaseDatabase.connection.
-  raw(`SELECT id FROM ${UserDatabase.TABLE_USERS} WHERE id LIKE ${id}`)
+  raw(`SELECT id FROM ${UserDatabase.TABLE_USERS} WHERE id LIKE "%${id}%"`)
  
 
     const userId = result

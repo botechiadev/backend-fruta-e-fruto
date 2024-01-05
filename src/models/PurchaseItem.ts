@@ -1,17 +1,17 @@
 export class PurchaseItem {
    private readonly id: string;
    private item: string;
-   private quantity: number = 0;
-   private unityPrice: number = 0;
-   private totalPrice: number = 0;
+   private quantity: number;
+   private unityPrice: number ;
+   private totalPrice: number ;
    private purchaseId: string;
 
    constructor(
        id: string,
        item: string,
-       quantity: number = 0,
-       unityPrice: number = 0,
-       totalPrice: number = 0,
+       quantity: number ,
+       unityPrice: number ,
+       totalPrice: number ,
        purchaseId: string
    ) {
        this.id = id;

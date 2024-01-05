@@ -6,6 +6,9 @@ var PRODUCTS_CATEGORY;
     PRODUCTS_CATEGORY[PRODUCTS_CATEGORY["horti-fruti"] = 0] = "horti-fruti";
     PRODUCTS_CATEGORY[PRODUCTS_CATEGORY["laticinios"] = 1] = "laticinios";
     PRODUCTS_CATEGORY[PRODUCTS_CATEGORY["armazem"] = 2] = "armazem";
+    PRODUCTS_CATEGORY[PRODUCTS_CATEGORY["limpeza"] = 3] = "limpeza";
+    PRODUCTS_CATEGORY[PRODUCTS_CATEGORY["papelaria"] = 4] = "papelaria";
+    PRODUCTS_CATEGORY[PRODUCTS_CATEGORY["higiene-pessoal"] = 5] = "higiene-pessoal";
 })(PRODUCTS_CATEGORY || (exports.PRODUCTS_CATEGORY = PRODUCTS_CATEGORY = {}));
 var USER_ROLES;
 (function (USER_ROLES) {

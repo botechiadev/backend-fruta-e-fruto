@@ -6,7 +6,7 @@ class User {
         this.id = id;
         this.idProfile = idProfile;
         this.fullName = fullName;
-        this.nickname = "@" + nickname.toLowerCase();
+        this.nickname = nickname;
         this.password = password;
         this.email = email;
         this.avatar = avatar;

@@ -3,15 +3,18 @@ import { PurchaseItem } from "../models/PurchaseItem";
 export enum PRODUCTS_CATEGORY {
     'horti-fruti',
     'laticinios',
-    'armazem'
+    'armazem',
+    'limpeza',
+    'papelaria',
+    'higiene-pessoal'
 }
 
 
 export interface IProductDB {
     id: string;
-    name: string;
+    item: string;
     description: string;
-    imageUrl: string;
+    image_url: string;
     price: number;
     category: PRODUCTS_CATEGORY;
 }
@@ -80,3 +83,52 @@ export interface IPurchaseItem {
   totalPrice : number,
   purchase_id: string
 }
+
+export interface IAccountDB{
+    id :string,
+    user_id : string,
+    balance : number,
+    score :number,
+    category: string
+}
+
+
+export interface ISaleDB{
+    id:string,
+    item: string,
+    price: number,
+    quantity: number,
+    totalPrice: number
+}
+
+
+export interface ISale4PurchaseDB{
+    id:string,
+    idPurchase: string,
+    item: string,
+    price: number,
+    quantity: number,
+    totalPrice: number
+}
+
+
+
+export interface IPurchaseDB {
+    id: string,
+    buyer_id: string,
+    finalPrice: Number,
+    created_at: string 
+}
+
+
+
+export interface IPurchaseTicket {
+    id: string,
+    buyerId: string,
+    accountId: string,
+    updatedScore: number,
+    updatedCategory: string,
+    purchasePrice: number,
+    purchaseList: IPurchaseDB[]
+}
+

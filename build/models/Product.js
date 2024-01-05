@@ -2,9 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Product = void 0;
 class Product {
-    constructor(id, name, description, imageUrl, price, category) {
+    constructor(id, item, description, imageUrl, price, category) {
         this.id = id;
-        this.name = name;
+        this.item = item;
         this.description = description;
         this.imageUrl = imageUrl;
         this.price = price;
@@ -13,8 +13,8 @@ class Product {
     getId() {
         return this.id;
     }
-    getName() {
-        return this.name;
+    getItem() {
+        return this.item;
     }
     getDescription() {
         return this.description;

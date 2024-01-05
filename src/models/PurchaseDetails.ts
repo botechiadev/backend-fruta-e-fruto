@@ -29,7 +29,6 @@ export class PurchaseDetails {
         this.accountId = accountId;
         // Inicializa os valores iniciais chamando os métodos correspondentes
         this.calculateTotalItems();
-
         this.calculateTotalDiscount();
         this.calculateFinalPrice();
     }
@@ -117,8 +116,7 @@ export class PurchaseDetails {
         this.purchaseList.push(item);
         // Atualiza os valores dependentes
         this.calculateTotalItems();
-
-        this.calculateTotalDiscount();
+                this.calculateTotalDiscount();
         this.calculateFinalPrice();
     }
 
