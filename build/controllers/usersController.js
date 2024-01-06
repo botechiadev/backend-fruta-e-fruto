@@ -8,10 +8,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const UserDatabase_1 = require("../database/UserDatabase");
 const User_1 = require("../models/User");
 const helpers_1 = require("../helpers/helpers");
@@ -89,6 +101,7 @@ class UsersController {
         });
     }
     createUser(req, res) {
+        var _a;
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { id, fullName, nickname, email, password, avatar, role } = req.body;
@@ -117,7 +130,24 @@ class UsersController {
                 };
                 const accountsDatabase = new AccountsDatabase_1.AccountsDatabase();
                 yield accountsDatabase.insertAccount(objAccount);
-                res.status(201).json({ message: "Usuario criado com sucesso" });
+                const [usersData] = yield userDatabase.findUserByNickname(objUser.nickname);
+                const dataHash = usersData;
+                const confirmHash = yield bcrypt_1.default.compare(password, dataHash.password);
+                if (!confirmHash) {
+                    res.status(401);
+                    throw new Error('"401" : Senha invalida');
+                }
+                const token = jsonwebtoken_1.default.sign({
+                    id: dataHash.id
+                }, (_a = process.env.JWT_KEY) !== null && _a !== void 0 ? _a : "", {
+                    expiresIn: process.env.JWT_EXPIRES_IN
+                });
+                const user = dataHash;
+                const { password: _ } = user, userLogin = __rest(user, ["password"]);
+                res.status(200).json({ message: "User result",
+                    token,
+                    user: userLogin
+                });
             }
             catch (error) {
                 console.error(error);

@@ -24,10 +24,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
 const UserDatabase_1 = require("../database/UserDatabase");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
+dotenv_1.default.config();
 class SignInController {
     postAuth(req, res) {
         var _a;
@@ -35,35 +35,25 @@ class SignInController {
             try {
                 const { nickname, password } = req.body;
                 const userDatabase = new UserDatabase_1.UserDatabase();
-                const [usersData] = yield userDatabase.findUserByNickname(nickname);
-                const userFirst = [usersData][0];
-                if (!usersData) {
-                    res.status(401);
-                    throw new Error("401 nickname INVALIDO");
+                const [userData] = yield userDatabase.findUserByNickname(nickname);
+                if (!userData) {
+                    res.status(401).json({ error: '401 nickname INVALIDO' });
                 }
                 else {
-                    const dataHash = usersData;
-                    const confirmHash = yield bcrypt_1.default.compare(password, dataHash.password);
-                    if (!confirmHash) {
-                        res.status(401);
-                        throw new Error('"401" : Senha invalida');
+                    const isValidPassword = yield bcrypt_1.default.compare(password, userData.password);
+                    if (!isValidPassword) {
+                        res.status(401).json({ error: '401 Senha invalida' });
                     }
-                    const token = jsonwebtoken_1.default.sign({
-                        id: dataHash.id
-                    }, (_a = process.env.JWT_KEY) !== null && _a !== void 0 ? _a : "", {
-                        expiresIn: process.env.JWT_EXPIRES_IN
+                    const token = jsonwebtoken_1.default.sign({ id: userData.id }, (_a = process.env.JWT_KEY) !== null && _a !== void 0 ? _a : '', {
+                        expiresIn: process.env.JWT_EXPIRES_IN,
                     });
-                    const user = dataHash;
-                    const { password: _ } = user, userLogin = __rest(user, ["password"]);
-                    res.status(200).json({ message: "User result",
-                        token,
-                        user: userLogin
-                    });
+                    const { password: _ } = userData, userLogin = __rest(userData, ["password"]);
+                    res.status(200).json({ message: 'User result', token, user: userLogin });
                 }
             }
             catch (error) {
                 console.error(error);
-                res.status(500).send(error instanceof Error ? error.message : "Unexpected error");
+                res.status(500).send(error instanceof Error ? error.message : 'Unexpected error');
             }
         });
     }
@@ -71,11 +61,11 @@ class SignInController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const result = req.user;
-                res.status(200).json({ message: "Usuario Autorizado", result });
+                res.status(200).json({ message: 'Usuario Autorizado', result });
             }
             catch (error) {
                 console.error(error);
-                res.status(500).send(error instanceof Error ? error.message : "Unexpected error");
+                res.status(500).send(error instanceof Error ? error.message : 'Unexpected error');
             }
         });
     }

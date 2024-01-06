@@ -1,3 +1,4 @@
+import  jwt  from 'jsonwebtoken';
 import { Request, Response } from "express";
 import { UserDatabase } from "../database/UserDatabase";
 import { User } from "../models/User";
@@ -158,11 +159,38 @@ async getUserByNickname(req: Request, res: Response) {
     const accountsDatabase = new AccountsDatabase();
     await accountsDatabase.insertAccount(objAccount)
 
+    const [usersData]= await userDatabase.findUserByNickname(objUser.nickname);
 
+  const dataHash = usersData
+       
+        const confirmHash = await bcrypt.compare(password , dataHash.password)
 
-                        
+       if(!confirmHash){
+        res.status(401)
+        throw new Error('"401" : Senha invalida')
+       }
 
-      res.status(201).json({ message: "Usuario criado com sucesso" });
+       const token = jwt.sign({
+        id: dataHash.id
+      },
+      process.env.JWT_KEY ?? "" ,
+      {
+        expiresIn: process.env.JWT_EXPIRES_IN
+      }
+      )
+
+      const user = dataHash
+
+      const {
+        password: _,
+        ...userLogin
+      } = user
+
+      res.status(200).json({ message: "User result",
+       token,
+       user: userLogin
+      });
+
     } catch (error) {
       console.error(error);
       res.status(500).send(error instanceof Error ? error.message : "Unexpected error");
