@@ -10,7 +10,17 @@ await BaseDatabase.connection(PurchaseDatabase.TABLE_PURCHASES).insert(purchase4
 }
 
 
-async findPurchaseById(id:string):Promise<IPurchaseDB[]>{
+async findPurchaseByBuyerId(id:string):Promise<IPurchaseDB[]>{
+
+    const result = await BaseDatabase.connection(PurchaseDatabase.TABLE_PURCHASES).
+    where( "buyer_id","LIKE", `%${id}%`)
+  
+  
+      const purchasesDB = result
+    return purchasesDB
+  }
+
+  async findPurchaseById(id:string):Promise<IPurchaseDB[]>{
 
     const result = await BaseDatabase.connection(PurchaseDatabase.TABLE_PURCHASES).
     where( "id","LIKE", `%${id}%`)
@@ -19,6 +29,14 @@ async findPurchaseById(id:string):Promise<IPurchaseDB[]>{
       const purchasesDB = result
     return purchasesDB
   }
+
+  async findPurchases():Promise<IPurchaseDB[]>{
+
+     const result: IPurchaseDB[] = await BaseDatabase.connection(PurchaseDatabase.TABLE_PURCHASES)
+     const purchasesDB = result;
+   return purchasesDB
+ 
+  }
   
-  
+
 }

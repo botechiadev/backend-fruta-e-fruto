@@ -1,3 +1,4 @@
+import  jwt  from 'jsonwebtoken';
 import { Request, Response } from "express";
 import { UserDatabase } from "../database/UserDatabase";
 import { User } from "../models/User";
@@ -6,6 +7,7 @@ import { today } from "../helpers/helpers";
 import { v4 as uuidv4 } from 'uuid';
 import { UserWithAccount } from "../models/UserWithAccount";
 import { AccountsDatabase } from "../database/AccountsDatabase";
+import bcrypt from 'bcrypt'
 class UsersController {
   async getAllUsers(req: Request, res: Response) {
     try {
@@ -47,26 +49,61 @@ class UsersController {
       const userFirst = usersDB[0];
 
       if (!userFirst) {
-        res.status(404).json({ message: "User not found" });
+        res.status(404)
+        throw new Error( "User not found" );
       } else {
-        const result = new User(
-          userFirst.id,
-          userFirst.id,
-          userFirst.fullName,
-          userFirst.nickname,
-          userFirst.password,
-          userFirst.email,
-          userFirst.avatar,
-          userFirst.role,
-          userFirst.createdAt
-        )
-        res.status(200).json({ message: "User found", result });
-      }
+        const result:User[] = usersDB.map((user)=>{
+          return new User(
+            user.id,
+            user.idProfile,
+            user.fullName,
+            user.nickname,
+            user.password,
+            user.email,
+            user.avatar,
+            user.role,
+            user.createdAt
+          )
+      })
+
+      res.status(200).json({message: "Usuario encontrado", result})
+    }
     } catch (error) {
       console.error(error);
       res.status(500).send(error instanceof Error ? error.message : "Unexpected error");
     }
   }
+/******************get USER BY NICKNAME***************** */
+
+async getUserByNickname(req: Request, res: Response) {
+  try {
+    const nickname = req.params.nickname;
+    const userDatabase = new UserDatabase();
+    const usersDB = await userDatabase.findUserByNickname(nickname);
+    const userFirst = usersDB[0];
+
+    if (!userFirst) {
+      res.status(404).json({ message: "User not found" });
+    } else {
+      const result = new User(
+        userFirst.id,
+        userFirst.id,
+        userFirst.fullName,
+        userFirst.nickname,
+        userFirst.password,
+        userFirst.email,
+        userFirst.avatar,
+        userFirst.role,
+        userFirst.createdAt
+      )
+      res.status(200).json({ message: "User found", result });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error instanceof Error ? error.message : "Unexpected error");
+  }
+}
+
 /*************************create user********************************** */
   async createUser(req: Request, res: Response) {
     try {
@@ -76,13 +113,14 @@ class UsersController {
     
       const newAccount = uuidv4();
 
+      const passwordHash = await bcrypt.hash(password, 10)
 
     const newInstanceUser = new UserWithAccount(
       id,
       newAccount,
       fullName,
       nickname,
-      password,
+      passwordHash,
       email,
       avatar,
       role,
@@ -121,11 +159,38 @@ class UsersController {
     const accountsDatabase = new AccountsDatabase();
     await accountsDatabase.insertAccount(objAccount)
 
+    const [usersData]= await userDatabase.findUserByNickname(objUser.nickname);
 
+  const dataHash = usersData
+       
+        const confirmHash = await bcrypt.compare(password , dataHash.password)
 
-                        
+       if(!confirmHash){
+        res.status(401)
+        throw new Error('"401" : Senha invalida')
+       }
 
-      res.status(201).json({ message: "Usuario criado com sucesso" });
+       const token = jwt.sign({
+        id: dataHash.id
+      },
+      process.env.JWT_KEY ?? "" ,
+      {
+        expiresIn: process.env.JWT_EXPIRES_IN
+      }
+      )
+
+      const user = dataHash
+
+      const {
+        password: _,
+        ...userLogin
+      } = user
+
+      res.status(200).json({ message: "User result",
+       token,
+       user: userLogin
+      });
+
     } catch (error) {
       console.error(error);
       res.status(500).send(error instanceof Error ? error.message : "Unexpected error");
