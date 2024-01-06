@@ -1,5 +1,6 @@
 import express, { Router } from "express";
 import SignInController from "./../controllers/signInController";
+import { authMiddleware } from "../middlewares/authMiddleware";
 
 class AuthRouter {
   private router: Router;
@@ -12,7 +13,8 @@ class AuthRouter {
   }
 
   private setupRoutes() {
-    this.router.post("/", this.signInController.getUserByNickname);
+    this.router.post("/", this.signInController.postAuth);
+    this.router.get("/profile", authMiddleware, this.signInController.getProfile);
   }
 
   getRouter() {

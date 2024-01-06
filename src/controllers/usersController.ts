@@ -6,6 +6,7 @@ import { today } from "../helpers/helpers";
 import { v4 as uuidv4 } from 'uuid';
 import { UserWithAccount } from "../models/UserWithAccount";
 import { AccountsDatabase } from "../database/AccountsDatabase";
+import bcrypt from 'bcrypt'
 class UsersController {
   async getAllUsers(req: Request, res: Response) {
     try {
@@ -111,13 +112,14 @@ async getUserByNickname(req: Request, res: Response) {
     
       const newAccount = uuidv4();
 
+      const passwordHash = await bcrypt.hash(password, 10)
 
     const newInstanceUser = new UserWithAccount(
       id,
       newAccount,
       fullName,
       nickname,
-      password,
+      passwordHash,
       email,
       avatar,
       role,

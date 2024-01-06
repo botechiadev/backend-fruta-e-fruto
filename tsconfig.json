@@ -10,6 +10,7 @@
         "noEmitOnError": true, /* Disable emitting files if any type checking errors are reported. */
         "esModuleInterop": true /* Adicione essa linha */,
         "strict": true,
+        "typeRoots": ["./src/@types"]
     },
         "include": ["src"],
         "exclude": ["node_modules"]

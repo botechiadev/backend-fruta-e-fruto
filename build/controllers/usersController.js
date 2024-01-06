@@ -8,6 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const UserDatabase_1 = require("../database/UserDatabase");
 const User_1 = require("../models/User");
@@ -15,6 +18,7 @@ const helpers_1 = require("../helpers/helpers");
 const uuid_1 = require("uuid");
 const UserWithAccount_1 = require("../models/UserWithAccount");
 const AccountsDatabase_1 = require("../database/AccountsDatabase");
+const bcrypt_1 = __importDefault(require("bcrypt"));
 class UsersController {
     getAllUsers(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -89,7 +93,8 @@ class UsersController {
             try {
                 const { id, fullName, nickname, email, password, avatar, role } = req.body;
                 const newAccount = (0, uuid_1.v4)();
-                const newInstanceUser = new UserWithAccount_1.UserWithAccount(id, newAccount, fullName, nickname, password, email, avatar, role, helpers_1.today, 0, 0, helpers_1.today, 'blue');
+                const passwordHash = yield bcrypt_1.default.hash(password, 10);
+                const newInstanceUser = new UserWithAccount_1.UserWithAccount(id, newAccount, fullName, nickname, passwordHash, email, avatar, role, helpers_1.today, 0, 0, helpers_1.today, 'blue');
                 const objUser = {
                     id: newInstanceUser.getId(),
                     idProfile: newInstanceUser.getIdProfile(),
