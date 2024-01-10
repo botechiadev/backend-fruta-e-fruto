@@ -13,7 +13,7 @@ export class AccountsDatabase extends BaseDatabase{
   return accountsDB
 } else{
   const result = await BaseDatabase.connection(AccountsDatabase.TABLE_ACCOUNTS).
-  where( "item","LIKE", `%${q}%`)
+  where( "id","LIKE", `%${q}%`)
   const accountsDB = result;
   return accountsDB
 }

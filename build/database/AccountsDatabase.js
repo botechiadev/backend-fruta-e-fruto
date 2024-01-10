@@ -21,7 +21,7 @@ class AccountsDatabase extends BaseDatabase_1.BaseDatabase {
             }
             else {
                 const result = yield BaseDatabase_1.BaseDatabase.connection(AccountsDatabase.TABLE_ACCOUNTS).
-                    where("item", "LIKE", `%${q}%`);
+                    where("id", "LIKE", `%${q}%`);
                 const accountsDB = result;
                 return accountsDB;
             }
