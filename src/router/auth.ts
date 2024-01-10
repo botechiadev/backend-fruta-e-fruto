@@ -15,6 +15,7 @@ class AuthRouter {
   private setupRoutes() {
     this.router.post("/", this.signInController.postAuth);
     this.router.get("/profile", authMiddleware, this.signInController.getProfile);
+
   }
 
   getRouter() {

@@ -67,7 +67,7 @@ export class UserWithAccount extends User {
         }
     }
 
-    public defineCategory(): void {
+    public defineCategory(score:number): void {
         if (this.score < 100) {
             this.category = 'blue';
         } else if (this.score >= 100 && this.score <= 1000) {

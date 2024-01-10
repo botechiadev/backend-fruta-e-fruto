@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { IRecipeDB } from "../interfaces/interfaces";
 
-class RecipesController {
+class PremiosController {
     private recipesFilePath: string;
     private recipesData: IRecipeDB[];
 
@@ -96,4 +96,4 @@ class RecipesController {
     }
 }
 
-export default RecipesController;
+export default PremiosController;

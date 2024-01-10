@@ -29,41 +29,36 @@ class PurchasesController {
                 const cartTotal = Number(total);
                 const purchaseId = (0, uuid_1.v4)();
                 const purchaseInstance = new Purchase_1.Purchase(purchaseId, buyerId, cartTotal, helpers_1.today);
-                const purchaseDatabase = new PurchaseDatabase_1.PurchaseDatabase();
+                console.log("Cart Total:", cartTotal);
+                console.log("Purchase ID:", purchaseId);
+                console.log('products:', productsList);
                 const purchase4Insert = {
                     id: purchaseInstance.getId(),
                     buyer_id: buyerId,
                     finalPrice: purchaseInstance.getTFinalPrice(),
                     created_at: purchaseInstance.getCreatedAt()
                 };
+                const purchaseDatabase = new PurchaseDatabase_1.PurchaseDatabase();
                 yield purchaseDatabase.insertPurchase(purchase4Insert);
                 const salesDatabase = new SalesDatabase_1.SalesDatabase();
+                if (!Array.isArray(productsList)) {
+                    console.error("Error: productsList is not an array");
+                    res.status(400).send("Bad Request: productsList should be an array");
+                    return;
+                }
                 for (const item of productsList) {
                     const saleId = (0, uuid_1.v4)();
                     const newSale = new Sale_1.Sale(saleId, purchaseInstance.getId(), item.id, item.price, item.quantity, item.totalPrice);
-                    if (newSale) {
-                        const newSaleDB = {
-                            id: newSale.getId(),
-                            idPurchase: newSale.getPurchaseId(),
-                            item: newSale.getItemId(),
-                            price: Number(newSale.getItemPrice()),
-                            quantity: Number(newSale.getItemQuantity()),
-                            totalPrice: Number(newSale.getItemTotalPrice())
-                        };
-                        try {
-                            yield salesDatabase.insertSale(newSaleDB);
-                        }
-                        catch (error) {
-                            res.status(400).json({ error: "Erro ao cadastrar item em base de dados" });
-                            return;
-                        }
-                    }
-                    else {
-                        res.status(400).json({ error: "Erro ao cadastrar item em base de dados" });
-                        return;
-                    }
+                    const newSaleDB = {
+                        id: newSale.getId(),
+                        idPurchase: newSale.getPurchaseId(),
+                        item: newSale.getItemId(),
+                        price: Number(newSale.getItemPrice()),
+                        quantity: Number(newSale.getItemQuantity()),
+                        totalPrice: Number(newSale.getItemTotalPrice())
+                    };
+                    yield salesDatabase.insertSale(newSaleDB);
                 }
-                const role = buyerId && total > 0 ? 'Cliente' : buyerId ? 'Cadastrado' : 'Anonimo';
                 const userDatabase = new UserDatabase_1.UserDatabase();
                 const client4Update = yield userDatabase.findUserById(buyerId);
                 const instanceClient = new User_1.User(client4Update[0].id, client4Update[0].idProfile, client4Update[0].fullName, client4Update[0].nickname, client4Update[0].password, client4Update[0].email, client4Update[0].avatar, interfaces_1.USER_ROLES.Cliente, client4Update[0].createdAt);
@@ -85,18 +80,18 @@ class PurchasesController {
                 const currentScore = Number(cartTotal * 0.3);
                 const score4Update = Number(accountFromDB[0].score) + Number(currentScore);
                 const currentBalance = Number(accountFromDB[0].balance);
-                const defineAccountCategory = (score4Update) => {
-                    if (score4Update < 100) {
+                const category4Update = (score) => {
+                    if (score < 100) {
                         return 'blue';
                     }
-                    else if (score4Update >= 100 && score4Update <= 1000) {
+                    else if (score >= 100 && score <= 1000) {
                         return 'gold';
                     }
                     else {
                         return 'black';
                     }
                 };
-                const instance4Account = new UserWithAccount_1.UserWithAccount(instanceClient.getId(), instanceClient.getIdProfile(), instanceClient.getFullName(), instanceClient.getNickname(), instanceClient.getPassword(), instanceClient.getEmail(), instanceClient.getAvatar(), instanceClient.getRole(), instanceClient.getCreatedAt(), score4Update, currentBalance, helpers_1.today, defineAccountCategory(score4Update));
+                const instance4Account = new UserWithAccount_1.UserWithAccount(instanceClient.getId(), instanceClient.getIdProfile(), instanceClient.getFullName(), instanceClient.getNickname(), instanceClient.getPassword(), instanceClient.getEmail(), instanceClient.getAvatar(), instanceClient.getRole(), instanceClient.getCreatedAt(), score4Update, currentBalance, helpers_1.today, category4Update(score4Update));
                 const account4Update = {
                     id: instance4Account.getIdProfile(),
                     user_id: buyerId,
@@ -128,22 +123,15 @@ class PurchasesController {
             }
             catch (error) {
                 console.log(error);
-                if (req.statusCode === 200) {
-                    res.status(500);
-                }
-                if (error instanceof Error) {
-                    res.send(error.message);
-                }
-                else {
-                    res.send("Erro inesperado");
-                }
+                res.status(500).send("Erro inesperado");
             }
         });
         this.getAllPurchases = ((req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
+                const q = req.query.q || undefined;
                 const purchaseDatabase = new PurchaseDatabase_1.PurchaseDatabase();
-                const purchaseDB = yield purchaseDatabase.findPurchases();
-                if (!purchaseDB[0]) {
+                const purchaseDB = yield purchaseDatabase.findPurchases(q);
+                if (!purchaseDB) {
                     res.status(404);
                     throw new Error("404: Nenhum pagamento cadastrado");
                 }
@@ -167,7 +155,7 @@ class PurchasesController {
         }));
         this.getPurchaseById = ((req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const id = req.params.id;
+                const id = req.body.id;
                 const purchaseDatabase = new PurchaseDatabase_1.PurchaseDatabase();
                 if (id === "000.000.000-00") {
                     const purchasesDB = yield purchaseDatabase.findPurchaseByBuyerId(id);
