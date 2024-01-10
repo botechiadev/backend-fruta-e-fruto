@@ -35,19 +35,20 @@ class SignInController {
             try {
                 const { nickname, password } = req.body;
                 const userDatabase = new UserDatabase_1.UserDatabase();
-                const [userData] = yield userDatabase.findUserByNickname(nickname);
+                const userData = yield userDatabase.findUserByNickname(nickname);
+                console.log(userData);
                 if (!userData) {
                     res.status(401).json({ error: '401 nickname INVALIDO' });
                 }
                 else {
-                    const isValidPassword = yield bcrypt_1.default.compare(password, userData.password);
+                    const isValidPassword = yield bcrypt_1.default.compare(password, userData[0].password);
                     if (!isValidPassword) {
                         res.status(401).json({ error: '401 Senha invalida' });
                     }
-                    const token = jsonwebtoken_1.default.sign({ id: userData.id }, (_a = process.env.JWT_KEY) !== null && _a !== void 0 ? _a : '', {
+                    const token = jsonwebtoken_1.default.sign({ id: userData[0].id }, (_a = process.env.JWT_KEY) !== null && _a !== void 0 ? _a : '', {
                         expiresIn: process.env.JWT_EXPIRES_IN,
                     });
-                    const { password: _ } = userData, userLogin = __rest(userData, ["password"]);
+                    const _b = userData[0], { password: _ } = _b, userLogin = __rest(_b, ["password"]);
                     res.status(200).json({ message: 'User result', token, user: userLogin });
                 }
             }

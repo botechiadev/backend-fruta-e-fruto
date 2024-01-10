@@ -1,13 +1,13 @@
 import express, { Request, Response, Router } from 'express';
-import RecipesController from './../controllers/recipesController';
+import PremiosController from '../controllers/premiosController';
 
 class RecipesRouter {
     private router: Router;
-    private controller: RecipesController;
+    private controller: PremiosController;
 
     constructor() {
         this.router = express.Router();
-        this.controller = new RecipesController();
+        this.controller = new PremiosController();
         this.setupRoutes();
     }
 

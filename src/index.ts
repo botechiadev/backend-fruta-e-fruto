@@ -9,13 +9,13 @@ import bodyParser from "body-parser";
 import morgan from "morgan";
 import path from 'path';
 
-import RecipesRouter from './router/recipes';
+import PremiosRouter from './router/premios';
 import ProductsRouter from './router/products';
 import PurchasesRouter from './router/purchases';
 import UsersRouter from './router/users';
 import AuthRouter from './router/auth';
 
-const recipesRouter = new RecipesRouter();
+const premiosRouter = new PremiosRouter();
 const usersRouter = new UsersRouter();
 const productsRouter = new ProductsRouter();
 const purchasesRouter = new PurchasesRouter();
@@ -35,7 +35,7 @@ app.get("/ping", (req: Request, res: Response) => {
   res.send("Pong");
 });
 app.use('/api/auth', authRouter.getRouter());
-app.use('/api/recipes', recipesRouter.getRouter());
+app.use('/api/premios', premiosRouter.getRouter());
 app.use('/api/products', productsRouter.getRouter());
 app.use('/api/users', usersRouter.getRouter());
 app.use('/api/purchases', purchasesRouter.getRouter());

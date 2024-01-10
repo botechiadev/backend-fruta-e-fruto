@@ -1,3 +1,4 @@
+import { PurchaseDatabase } from './../database/PurchaseDatabase';
 import dotenv from 'dotenv';
 import { NextFunction, Request, Response } from 'express';
 import { UserDatabase } from '../database/UserDatabase';
@@ -14,7 +15,7 @@ class SignInController {
     try {
       const { nickname, password } = req.body;
       const userDatabase = new UserDatabase();
-      const [userData] = await userDatabase.findUserByNickname(nickname);
+      const userData = await userDatabase.findUserByNickname(nickname);
 
       if (!userData) {
         res.status(401).json({ error: '401 nickname INVALIDO' });
@@ -48,6 +49,7 @@ class SignInController {
       res.status(500).send(error instanceof Error ? error.message : 'Unexpected error');
     }
   }
-}
 
+
+}
 export default SignInController;

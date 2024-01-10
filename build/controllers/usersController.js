@@ -79,27 +79,6 @@ class UsersController {
             }
         });
     }
-    getUserByNickname(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const nickname = req.params.nickname;
-                const userDatabase = new UserDatabase_1.UserDatabase();
-                const usersDB = yield userDatabase.findUserByNickname(nickname);
-                const userFirst = usersDB[0];
-                if (!userFirst) {
-                    res.status(404).json({ message: "User not found" });
-                }
-                else {
-                    const result = new User_1.User(userFirst.id, userFirst.id, userFirst.fullName, userFirst.nickname, userFirst.password, userFirst.email, userFirst.avatar, userFirst.role, userFirst.createdAt);
-                    res.status(200).json({ message: "User found", result });
-                }
-            }
-            catch (error) {
-                console.error(error);
-                res.status(500).send(error instanceof Error ? error.message : "Unexpected error");
-            }
-        });
-    }
     createUser(req, res) {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
