@@ -30,30 +30,32 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 dotenv_1.default.config();
 class SignInController {
     postAuth(req, res) {
-        var _a;
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { nickname, password } = req.body;
                 const userDatabase = new UserDatabase_1.UserDatabase();
-                const [userData] = yield userDatabase.findUserByNickname(nickname);
+                const userData = yield userDatabase.findUserByNickname(nickname);
                 if (!userData) {
-                    res.status(401).json({ error: '401 nickname INVALIDO' });
+                    return res.status(401).json({ error: "401 Invalid nickname" });
                 }
-                else {
-                    const isValidPassword = yield bcrypt_1.default.compare(password, userData.password);
-                    if (!isValidPassword) {
-                        res.status(401).json({ error: '401 Senha invalida' });
-                    }
-                    const token = jsonwebtoken_1.default.sign({ id: userData.id }, (_a = process.env.JWT_KEY) !== null && _a !== void 0 ? _a : '', {
-                        expiresIn: process.env.JWT_EXPIRES_IN,
-                    });
-                    const { password: _ } = userData, userLogin = __rest(userData, ["password"]);
-                    res.status(200).json({ message: 'User result', token, user: userLogin });
+                const isValidPassword = yield bcrypt_1.default.compare(password, userData[0].password);
+                if (!isValidPassword) {
+                    return res.status(401).json({ error: "401 Invalid password" });
                 }
+                const token = jsonwebtoken_1.default.sign({ id: userData[0].id }, process.env.JWT_KEY || "", {
+                    expiresIn: process.env.JWT_EXPIRES_IN || "1d",
+                });
+                const _a = userData[0], { password: _ } = _a, userLogin = __rest(_a, ["password"]);
+                return res
+                    .status(200)
+                    .json({ message: "User result", token, user: userLogin });
             }
             catch (error) {
                 console.error(error);
-                res.status(500).send(error instanceof Error ? error.message : 'Unexpected error');
+                if (error instanceof Error) {
+                    return res.status(500).send(error.message);
+                }
+                return res.status(500).send("Unexpected error");
             }
         });
     }
@@ -61,11 +63,14 @@ class SignInController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const result = req.user;
-                res.status(200).json({ message: 'Usuario Autorizado', result });
+                return res.status(200).json({ message: "Authorized user", result });
             }
             catch (error) {
                 console.error(error);
-                res.status(500).send(error instanceof Error ? error.message : 'Unexpected error');
+                if (error instanceof Error) {
+                    return res.status(500).send(error.message);
+                }
+                return res.status(500).send("Unexpected error");
             }
         });
     }

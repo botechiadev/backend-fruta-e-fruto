@@ -42,7 +42,7 @@ class UserWithAccount extends User_1.User {
             throw new Error('Pontuação insuficiente para resgatar o prêmio.');
         }
     }
-    defineCategory() {
+    defineCategory(score) {
         if (this.score < 100) {
             this.category = 'blue';
         }

@@ -29,13 +29,29 @@ async findPurchaseByBuyerId(id:string):Promise<IPurchaseDB[]>{
       const purchasesDB = result
     return purchasesDB
   }
+  async findPurchaseByOwner(buyer:string):Promise<IPurchaseDB[]>{
 
-  async findPurchases():Promise<IPurchaseDB[]>{
+    const result = await BaseDatabase.connection(PurchaseDatabase.TABLE_PURCHASES)
+      .where("buyer_id", "LIKE", `%${buyer}%`);
+  
+  
+      const purchasesDB = result
+    return purchasesDB
+  }
+  async findPurchases(q:string|undefined):Promise<IPurchaseDB[]>{
 
-     const result: IPurchaseDB[] = await BaseDatabase.connection(PurchaseDatabase.TABLE_PURCHASES)
-     const purchasesDB = result;
-   return purchasesDB
- 
+     
+    if(!q){
+    const result: IPurchaseDB[] = await BaseDatabase.connection(PurchaseDatabase.TABLE_PURCHASES)
+    const resultDB = result
+    return resultDB
+    }else{
+    const result : IPurchaseDB[] = await BaseDatabase.connection(PurchaseDatabase.TABLE_PURCHASES).where("buyer_id", "LIKE", `%${q}%`)
+          const resultDB = result
+    return resultDB
+  }
+     
+     
   }
   
 
