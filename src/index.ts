@@ -3,7 +3,7 @@
 import express , {Application, Request, Response} from 'express'
 import dotenv from 'dotenv'
 dotenv.config()
-const port = Number(process.env.PORT)|| 3000
+const port = Number(process.env.PORT)|| 3001
 
 
 import cors from "cors";
@@ -49,7 +49,7 @@ app.use('/api/purchases', purchasesRouter.getRouter());
 app.use('/api/score', scoreRouter.getRouter());
 
 
-app.listen(port, () => {
+app.listen(3001, () => {
     console.log(`Server is running on port ${port}`);
 });
 
