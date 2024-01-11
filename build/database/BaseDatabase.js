@@ -13,7 +13,7 @@ exports.BaseDatabase = BaseDatabase;
 BaseDatabase.connection = (0, knex_1.knex)({
     client: "sqlite3",
     connection: {
-        filename: './src/database/template.db',
+        filename: 'src/database/database.db',
     },
     useNullAsDefault: true,
     pool: {
