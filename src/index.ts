@@ -34,11 +34,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json())
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static(path.resolve(__dirname, "./../public/")))
+app.use(express.static(path.resolve(__dirname, "../../public/")))
 app.get("/ping", (req: Request, res: Response) => {
   res.send("Pong");
 });
-
+app.get("/", (req: Request, res: Response) => {
+  res.sendFile(path.resolve(__dirname, "../public/index.html"));
+});
 app.use('/api/auth', authRouter.getRouter());
 app.use('/api/premios', premiosRouter.getRouter());
 app.use('/api/products', productsRouter.getRouter());
