@@ -1,6 +1,6 @@
 import { knex } from 'knex'
 import dotenv from 'dotenv'
-
+import { sqlite3 } from 'sqlite3'
 dotenv.config()
 
 export abstract class BaseDatabase {
